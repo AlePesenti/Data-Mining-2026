@@ -4,7 +4,7 @@ Data Mining Assignment 2026
 ## Instructions to run code
 
 ## Libraries to run code
-sklearn
+scikit-learn
 matplotlib
 unicodedata
 pandas
