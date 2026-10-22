@@ -1,3 +1,4 @@
+import os
 import re
 import unicodedata
 
@@ -11,6 +12,8 @@ RANDOM_SEED = 42
 
 REMOVE_NAMES = True  #switch to remove hotels and city names so we can check the impact of this change
 MIN_DF = 5   # sparse-term removal: keep only words that appear in at least 5 training reviews
+FIG_DIR = "figures"   # plots are saved here instead of shown
+os.makedirs(FIG_DIR, exist_ok=True)
 
 pd.set_option("display.max_colwidth", 200)
 
@@ -73,7 +76,8 @@ def review_length(df):
     ax.set_ylabel("Count")
     ax.set_title("Review length by class")
     ax.legend()
-    plt.show()
+    plt.savefig(f"{FIG_DIR}/review_length.png", dpi=200, bbox_inches="tight")
+    plt.close()
     return df
 
 

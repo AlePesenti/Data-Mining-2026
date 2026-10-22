@@ -10,7 +10,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 
-from preprocessing import RANDOM_SEED
+from preprocessing import RANDOM_SEED, FIG_DIR
 
 
 def train_naive_bayes(train_bow, y_train):
@@ -57,7 +57,8 @@ def plot_naive_bayes_tuning(nb_grid, nb_results_df, train_bow):
     ax.set_ylabel("CV accuracy")
     ax.set_title("Multinomial naive Bayes: top-k feature selection")
     ax.legend()
-    plt.show()
+    plt.savefig(f"{FIG_DIR}/nb_tuning.png", dpi=200, bbox_inches="tight")
+    plt.close()
 
 
 def train_logistic_regression(train_bow, y_train, test_bow, y_test):
@@ -77,7 +78,8 @@ def plot_logistic_regression_tuning(lrmodel):
     plt.axvline(lrmodel.C_[0], ls="--", c="r", label="best")
     plt.xscale("log")
     plt.xlabel("C"); plt.ylabel("CV accuracy"); plt.legend()
-    plt.show()
+    plt.savefig(f"{FIG_DIR}/lr_tuning.png", dpi=200, bbox_inches="tight")
+    plt.close()
 
 
 def train_tree(train_bow, y_train, test_bow, y_test):
@@ -105,7 +107,8 @@ def plot_tree_tuning(grid):
     plt.axvline(grid.best_params_["ccp_alpha"], ls="--", c="r", label="best")
     plt.xscale("log")
     plt.xlabel("ccp_alpha"); plt.ylabel("CV accuracy"); plt.legend()
-    plt.show()
+    plt.savefig(f"{FIG_DIR}/tree_tuning.png", dpi=200, bbox_inches="tight")
+    plt.close()
 
 
 def tune_random_forest(train_bow, y_train):
@@ -147,7 +150,8 @@ def plot_random_forest_tuning(rf_results_df):
     ax.set_xlabel("Number of trees")
     ax.set_ylabel("OOB accuracy")
     ax.legend(title="max_features", bbox_to_anchor=(1, 1))
-    plt.show()
+    plt.savefig(f"{FIG_DIR}/rf_tuning.png", dpi=200, bbox_inches="tight")
+    plt.close()
 
 
 def tune_gradient_boosting(train_bow, y_train):
@@ -186,4 +190,5 @@ def plot_gradient_boosting_tuning(grad_results_df):
     ax.set_title("Gradient boosting hyperparameter tuning")
     ax.legend(title="Learning rate and depth", bbox_to_anchor=(1, 1))
     fig.tight_layout()
-    plt.show()
+    plt.savefig(f"{FIG_DIR}/gb_tuning.png", dpi=200, bbox_inches="tight")
+    plt.close()
