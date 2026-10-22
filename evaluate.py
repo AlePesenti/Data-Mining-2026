@@ -123,6 +123,13 @@ def question_3(best_rf, test_bow, y_test, sentiment_test):
     print(f"p-value: {p_value}")
     print("Expected counts:", expected)
 
+def top_features_naive_bayes(nb_model, feature_names):
+    nb_words = feature_names[nb_model.named_steps["selectkbest"].get_support()]
+    nb_log_prob = nb_model.named_steps["multinomialnb"].feature_log_prob_
+    nb_ratio = pd.Series(np.exp(nb_log_prob[1] - nb_log_prob[0]), index=nb_words)
+
+    print("Top 5 -> AI (times more likely in AI reviews)\n", nb_ratio.sort_values(ascending=False).head(5).round(1))
+    print("\nTop 5 -> Human (times more likely in human reviews)\n", (1 / nb_ratio).sort_values(ascending=False).head(5).round(1))
 
 def top_features_logistic_regression(lrmodel, feature_names):
     coefs = pd.Series(lrmodel.coef_[0], index=feature_names)
@@ -160,9 +167,10 @@ def top_features_gradient_boosting(best_gbc, feature_names):
     print("\nTop 5 -> Gradient Boosting\n", top_gbc.round(3))
 
 
-def question_4(vectorizer, lrmodel, grid, best_rf, best_gbc):
+def question_4(vectorizer, nb_model, lrmodel, grid, best_rf, best_gbc):
 
     feature_names = vectorizer.get_feature_names_out()
+    top_features_naive_bayes(nb_model, feature_names)
     top_features_logistic_regression(lrmodel, feature_names)
     top_features_tree(grid, feature_names)
     top_features_random_forest(best_rf, feature_names)
