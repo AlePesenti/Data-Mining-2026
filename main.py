@@ -1,4 +1,3 @@
-"""Assignment Data Mining 2026 - Detection of Fake Hotel Reviews."""
 from preprocessing import (
     load_data, missing_text_per_class, most_frequent_texts, build_text_raw, review_length, surface_cues,
     clean_text, get_model_inputs, split_data, bag_of_words,

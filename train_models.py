@@ -1,9 +1,3 @@
-"""Classifiers and hyperparameter tuning.
-
-The training/validation set (1500 reviews) is used for training and hyperparameter selection with
-cross-validation or (for random forests) out-of-bag evaluation. After tuning, each model is trained on the
-complete training set with the selected hyperparameter values.
-"""
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -20,11 +14,6 @@ from preprocessing import RANDOM_SEED
 
 
 def train_naive_bayes(train_bow, y_train):
-    """Multinomial naive Bayes + top-k feature selection.
-
-    Hyperparameter: the value of k in selecting the top-k features. Feature selection must happen inside
-    the cross-validation (otherwise the CV score is optimistic).
-    """
     # Feature selection is part of the pipeline,
     # so in each fold the top-k terms are chosen using only that fold's training data.
     nb_pipe = make_pipeline(SelectKBest(chi2), MultinomialNB())
@@ -72,7 +61,6 @@ def plot_naive_bayes_tuning(nb_grid, nb_results_df, train_bow):
 
 
 def train_logistic_regression(train_bow, y_train, test_bow, y_test):
-    """Logistic regression with Lasso penalty (penalty="l1", C = 1/lambda)."""
     lrmodel = LogisticRegressionCV(Cs = np.logspace(-3, 3, 30), solver = 'liblinear', penalty= "l1", cv = 5, random_state=RANDOM_SEED)
     lrmodel.fit(train_bow, y_train)
     print(lrmodel.score(test_bow, y_test))
@@ -93,11 +81,6 @@ def plot_logistic_regression_tuning(lrmodel):
 
 
 def train_tree(train_bow, y_train, test_bow, y_test):
-    """Single classification tree.
-
-    Hyperparameter: the cost-complexity pruning parameter alpha (ccp_alpha). Candidate values of alpha
-    come from cost_complexity_pruning_path.
-    """
     path = DecisionTreeClassifier(random_state=RANDOM_SEED).cost_complexity_pruning_path(train_bow, y_train)
     alphas = path.ccp_alphas[:-1]
 
@@ -126,10 +109,6 @@ def plot_tree_tuning(grid):
 
 
 def tune_random_forest(train_bow, y_train):
-    """Random forest with OOB tuning.
-
-    Hyperparameters: number of trees, number of randomly selected features.
-    """
     performance = []
 
     # Random Forests only accept numeric input, so we use the bag-of-words representation
@@ -172,10 +151,6 @@ def plot_random_forest_tuning(rf_results_df):
 
 
 def tune_gradient_boosting(train_bow, y_train):
-    """Gradient boosting.
-
-    Hyperparameters: shrinkage (learning rate), tree depth, number of trees.
-    """
     param_grid = {
         "n_estimators": [100, 500, 1000],
         "learning_rate": [0.01, 0.1, 0.5],

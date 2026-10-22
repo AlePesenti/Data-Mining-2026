@@ -1,8 +1,4 @@
-"""Evaluation on the test set and answers to the assignment questions.
 
-Predictive performance is measured with accuracy, precision, recall and the F1 score,
-with fake (AI = 1) as the positive class.
-"""
 import numpy as np
 import pandas as pd
 from scipy.stats import chi2_contingency
@@ -14,7 +10,6 @@ from preprocessing import RANDOM_SEED
 
 
 def evaluate_models(train_bow, y_train, test_bow, y_test):
-    """Quantitative evaluation."""
     # Multinomial Naive Bayes Evaluation
 
     # Logistic Regression Evaluation
@@ -57,7 +52,6 @@ def evaluate_models(train_bow, y_train, test_bow, y_test):
 
 
 def mcnemar_test(y_true, pred_a, pred_b, name_a, name_b):
-    """McNemar's test (Dietterich, 1998) on the difference in accuracy between two classifiers, alpha = 0.01."""
     a_ok, b_ok = pred_a == y_true, pred_b == y_true
     table = np.array([[np.sum(a_ok & b_ok),  np.sum(a_ok & ~b_ok)],
                       [np.sum(~a_ok & b_ok), np.sum(~a_ok & ~b_ok)]])
@@ -69,9 +63,7 @@ def mcnemar_test(y_true, pred_a, pred_b, name_a, name_b):
 
 
 def question_1(nb_model, lrmodel, test_bow, y_test):
-    """How does the performance of the generative linear model (multinomial naive Bayes) compare to
-    the discriminative linear model (regularized logistic regression)?
-    """
+
     # Final models
     nb_pred = nb_model.predict(test_bow)
     lr_pred = lrmodel.predict(test_bow)
@@ -93,19 +85,12 @@ def question_1(nb_model, lrmodel, test_bow, y_test):
 
 
 def question_2(grid, rf_model, grid_search, test_bow, y_test):
-    """Do the tree ensembles improve on the performance of the single tree?"""
     y_test = np.asarray(y_test)
     mcnemar_test(y_test, grid.predict(test_bow), rf_model.predict(test_bow), "Tree", "RF")
     mcnemar_test(y_test, grid.predict(test_bow), grid_search.predict(test_bow), "Tree", "GB")
 
 
 def question_3(best_rf, test_bow, y_test, sentiment_test):
-    """For the random forest classifier finally selected, is it better at distinguishing between fake and
-    genuine positive reviews or between fake and genuine negative reviews?
-
-    A statistical test determines whether the difference in accuracy between positive and negative reviews
-    is significant.
-    """
     rf = best_rf.predict(test_bow)
 
     positive_reviews = sentiment_test == "POS"
@@ -176,10 +161,7 @@ def top_features_gradient_boosting(best_gbc, feature_names):
 
 
 def question_4(vectorizer, lrmodel, grid, best_rf, best_gbc):
-    """For each algorithm, what are the 5 most important features in the final model? For the linear models,
-    make a distinction between features pointing towards an AI-generated review and features pointing towards
-    a review written by a human.
-    """
+
     feature_names = vectorizer.get_feature_names_out()
     top_features_logistic_regression(lrmodel, feature_names)
     top_features_tree(grid, feature_names)
