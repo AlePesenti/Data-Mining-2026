@@ -17,7 +17,7 @@ def evaluate_models(train_bow, y_train, test_bow, y_test):
     # Single Classification Tree Evaluation
 
     # Random Forests Evaluation
-    best_rf = RandomForestClassifier(n_estimators=1000, max_features="log2", random_state=RANDOM_SEED)
+    best_rf = RandomForestClassifier(n_estimators=1000, max_features="sqrt", random_state=RANDOM_SEED)
     best_rf.fit(train_bow, y_train)
     y_pred = best_rf.predict(test_bow)
 

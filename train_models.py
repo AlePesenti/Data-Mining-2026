@@ -128,7 +128,7 @@ def tune_random_forest(train_bow, y_train):
 
 
 def train_random_forest(train_bow, y_train):
-    rf_model = RandomForestClassifier(n_estimators=1000, random_state=RANDOM_SEED, max_features="log2", oob_score=True)
+    rf_model = RandomForestClassifier(n_estimators=1000, random_state=RANDOM_SEED, max_features="sqrt", oob_score=True)
     rf_model.fit(train_bow, y_train)
     return rf_model
 
