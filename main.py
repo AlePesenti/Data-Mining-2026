@@ -49,7 +49,7 @@ def main():
     question_1(nb_model, lrmodel, test_bow, y_test)
     question_2(grid, rf_model, grid_search, test_bow, y_test)
     question_3(best_rf, test_bow, y_test, sentiment_test)
-    question_4(vectorizer, lrmodel, grid, best_rf, best_gbc)
+    question_4(vectorizer, nb_model, lrmodel, grid, best_rf, best_gbc)
 
 
 if __name__ == "__main__":
